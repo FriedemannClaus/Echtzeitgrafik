@@ -22,8 +22,8 @@ int main(int argc, char** argv)
     glViewport(0, 0, WIDTH, HEIGHT);
 
     // std::cout << std::filesystem::path(ROOT_DIR) / "res/shader.frag" << std::endl;
-    std::filesystem::path simpleVertexShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.frag";
-    std::filesystem::path simpleFragmentShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.vert";
+    std::filesystem::path simpleVertexShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.vert";
+    std::filesystem::path simpleFragmentShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.frag";
 
     GLint shaderProgram = createShaderPipelineFromPaths(simpleVertexShaderPath, simpleFragmentShaderPath);
 
