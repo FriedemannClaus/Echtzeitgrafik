@@ -126,3 +126,4 @@ static const GLchar* perspectiveFragmentShaderSource =
 "    color = vec4(ourColor, 1.0f);\n"
 "    //color = vec4(vec3(gl_FragCoord.z), 1.0);\n"
 "}\0";
+

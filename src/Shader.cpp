@@ -2,12 +2,12 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-//#include "shared/functions.h"
+#include "shared/readfile.h"
 #include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader(const std::filesystem::path& vertexPath, const std::filesystem::path& fragmentPath) {
-    std::string vertexCode = readShaderFile(vertexPath); //Todo: readFile aus funtions.h verwenden
-    std::string fragmentCode = readShaderFile(fragmentPath);
+    std::string vertexCode = readFile(vertexPath); //Todo: readFile aus funtions.h verwenden
+    std::string fragmentCode = readFile(fragmentPath);
     compileShader(vertexCode.c_str(), fragmentCode.c_str());
 }
 

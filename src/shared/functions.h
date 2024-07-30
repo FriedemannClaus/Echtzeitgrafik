@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 
 #include "data.h"
+#include "readfile.h"
 
 GLFWwindow* initAndCreateWindow(bool debugContext = false)
 {
@@ -63,15 +64,6 @@ GLFWwindow* initAndCreateWindow(bool debugContext = false)
 }
 
 
-std::string readFile(const std::filesystem::path& filePath) {
-	std::ifstream file(filePath);
-	if (!file) {
-		std::cerr << "Failed to open file: " << filePath << std::endl;
-		return "";
-	}
-	return std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-}
-
 GLint createShaderPipeline(const char* vertexSource, const char* fragmentSource)
 {
 	/* Vertex shader */
@@ -123,3 +115,4 @@ GLint createShaderPipelineFromPaths(const std::filesystem::path& vertexPath, con
 
 	return createShaderPipeline(vertexSourceStr.c_str(), fragmentSourceStr.c_str());
 }
+

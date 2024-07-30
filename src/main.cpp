@@ -12,6 +12,7 @@
 
 #include "shared/data.h"
 #include "shared/functions.h"
+#include "shared/readfile.h"
 #include "Shader.hpp"
 
 double lastTime = 0.0;
