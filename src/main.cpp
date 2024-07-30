@@ -30,6 +30,10 @@ void updateFPS() {
 	}
 }
 
+void APIENTRY debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+	std::cerr << "OpenGL Debug Message: " << message << std::endl;
+}
+
 
 int main(int argc, char** argv)
 {
