@@ -8,8 +8,8 @@
 
 class Shader {
 public:
-    Shader(const std::filesystem::path& vertexPath, const std::filesystem::path& fragmentPath); // Konstruktor
-    ~Shader(); // Destruktor
+    Shader(const std::filesystem::path& vertexPath, const std::filesystem::path& fragmentPath);
+    ~Shader();
 
     // Kopierkonstruktor und -zuweisung deaktivieren
     Shader(const Shader&) = delete;
