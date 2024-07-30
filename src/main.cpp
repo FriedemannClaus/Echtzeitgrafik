@@ -22,7 +22,6 @@ float fps = 0.0f;
 void updateFPS() {
 	double currentTime = glfwGetTime();
 	frameCount++;
-#include <Shader.hpp>
 
 	if (currentTime - lastTime >= 1.0) { // Every second
 		fps = frameCount / static_cast<float>(currentTime - lastTime);
