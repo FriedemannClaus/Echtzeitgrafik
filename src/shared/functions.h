@@ -121,7 +121,5 @@ GLint createShaderPipelineFromPaths(const std::filesystem::path& vertexPath, con
 	std::string vertexSourceStr = readFile(vertexPath);
 	std::string fragmentSourceStr = readFile(fragmentPath);
 
-	std::cout << vertexSourceStr << std::endl;
-
 	return createShaderPipeline(vertexSourceStr.c_str(), fragmentSourceStr.c_str());
 }
