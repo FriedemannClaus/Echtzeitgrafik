@@ -14,6 +14,7 @@
 #include "shared/functions.h"
 #include "shared/readfile.h"
 #include "Shader.hpp"
+#include "GeometryBuffer.hpp"
 
 double lastTime = 0.0;
 int frameCount = 0;
@@ -49,20 +50,8 @@ int main(int argc, char** argv)
 
     Shader shader(simpleVertexShaderPath, simpleFragmentShaderPath);
 
-    GLuint vao, vbo;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangle), triangle, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
-
-    glBindVertexArray(0);
+    GeometryBuffer geometryBuffer;
+    geometryBuffer.initialize(std::vector<float>(triangle, triangle + sizeof(triangle) / sizeof(triangle[0])));
 
     shader.use();
     glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
@@ -72,9 +61,10 @@ int main(int argc, char** argv)
         glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-		glBindVertexArray(vao);
+        geometryBuffer.bind();
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(0);
+        geometryBuffer.unbind();
+
 
 		updateFPS();
 
@@ -83,8 +73,8 @@ int main(int argc, char** argv)
 		glfwPollEvents();
 	}
 
-    glDeleteVertexArrays(1, &vao);
-    glDeleteBuffers(1, &vbo);
+    geometryBuffer.~GeometryBuffer();
+
     glfwTerminate();
 
     return 0;
