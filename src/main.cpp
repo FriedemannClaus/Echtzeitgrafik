@@ -76,14 +76,10 @@ int main(int argc, char** argv)
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glBindVertexArray(0);
 
-		// update fps
 		updateFPS();
 
-		// swap buffer
 		glfwSwapBuffers(window);
 		
-
-		// process user events
 		glfwPollEvents();
 	}
 
