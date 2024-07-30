@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 
 #define GLEW_STATIC
 #include <GL/glew.h> // has to be included first!
@@ -12,6 +13,7 @@
 #include "shared/data.h"
 #include "shared/functions.h"
 
+
 int main(int argc, char** argv)
 {
     std::cout << "HelloTriangleRetained" << std::endl;
@@ -19,7 +21,12 @@ int main(int argc, char** argv)
     GLFWwindow* window = initAndCreateWindow();
     glViewport(0, 0, WIDTH, HEIGHT);
 
-    GLint shaderProgram = createShaderPipeline(simpleVertexShaderSource, simpleFragmentShaderSource);
+    // std::cout << std::filesystem::path(ROOT_DIR) / "res/shader.frag" << std::endl;
+    std::filesystem::path simpleVertexShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.frag";
+    std::filesystem::path simpleFragmentShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.vert";
+
+    GLint shaderProgram = createShaderPipelineFromPaths(simpleVertexShaderPath, simpleFragmentShaderPath);
+
     GLuint vao, vbo;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
