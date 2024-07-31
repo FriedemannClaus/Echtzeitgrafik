@@ -9,6 +9,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include "helper/RootDir.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "shared/data.h"
 #include "shared/functions.h"
@@ -20,26 +21,32 @@ double lastTime = 0.0;
 int frameCount = 0;
 float fps = 0.0f;
 
+static bool usePerspectiveProjection = true; 
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+        usePerspectiveProjection = !usePerspectiveProjection;
+        std::cout << (usePerspectiveProjection ? "Wechsel zu Perspektivprojektion" : "Wechsel zu Orthogonaler Projektion") << std::endl;
+    }
+}
 
 void updateFPS() {
-	double currentTime = glfwGetTime();
-	frameCount++;
+    double currentTime = glfwGetTime();
+    frameCount++;
 
-	if (currentTime - lastTime >= 1.0) { // Every second
-		fps = frameCount / static_cast<float>(currentTime - lastTime);
-		frameCount = 0;
-		lastTime = currentTime;
-		std::cout << "FPS: " << fps << std::endl;
-	}
+    if (currentTime - lastTime >= 1.0) { // Every second
+        fps = frameCount / static_cast<float>(currentTime - lastTime);
+        frameCount = 0;
+        lastTime = currentTime;
+        std::cout << "FPS: " << fps << std::endl;
+    }
 }
 
 void APIENTRY debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
-	std::cerr << "OpenGL Debug Message: " << message << std::endl;
+    std::cerr << "OpenGL Debug Message: " << message << std::endl;
 }
 
-
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     std::cout << "HelloTriangleRetained" << std::endl;
 
     GLFWwindow* window = initAndCreateWindow();
@@ -53,27 +60,68 @@ int main(int argc, char** argv)
     GeometryBuffer geometryBuffer;
     geometryBuffer.initialize(cube, sizeof(cube));
 
+    glEnable(GL_DEPTH_TEST); // Enable depth testing
+
+    glm::mat4 model, view, projection;
+    
+    model = glm::mat4(1.0f); // Identity matrix, cube starts at origin
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // Position it at the origin
+    model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Example: Rotation
+    model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f)); // Example: Scaling
+
+    view = glm::lookAt(
+        glm::vec3(0.0f, 0.0f, 3.0f), // Camera position
+        glm::vec3(0.0f, 0.0f, 0.0f), // Look-at point
+        glm::vec3(0.0f, 1.0f, 0.0f)  // Up vector
+    );
+
+    // Initialize projection matrix
+    projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+
     shader.use();
+    shader.setUniform("model", model);
+    shader.setUniform("view", view);
+    shader.setUniform("projection", projection);
+
+    glfwSetKeyCallback(window, keyCallback);
     glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
 
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
+        if (usePerspectiveProjection) {
+            projection = glm::perspective(
+                glm::radians(45.0f),
+                4.0f / 3.0f,
+                0.1f,
+                100.0f
+            );
+        } else {
+            projection = glm::ortho(
+                -1.0f, 1.0f,
+                -1.0f, 1.0f,
+                0.1f, 100.0f
+            );
+        }
+
+        // Clear the window and depth buffer
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+
+        shader.use();
+        shader.setUniform("model", model);
+        shader.setUniform("view", view);
+        shader.setUniform("projection", projection);
 
         geometryBuffer.bind();
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLES, 0, 36); // Assuming the cube is made of 36 vertices
         geometryBuffer.unbind();
 
         updateFPS();
 
         glfwSwapBuffers(window);
-
         glfwPollEvents();
     }
 
     geometryBuffer.~GeometryBuffer();
-
     glfwTerminate();
 
     return 0;
