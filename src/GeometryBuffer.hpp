@@ -19,13 +19,13 @@ public:
     void initialize(const float* vertices, int size);
     void bind() const;
     void unbind() const;
+    void cleanUp();
     GLuint getVAO() const { return vao; }
 
 private:
     GLuint vao;
     GLuint vbo;
     GLuint ebo;
-    void cleanUp();
     void copyFrom(const GeometryBuffer& other);
 };
 
