@@ -10,6 +10,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include "GeometryBuffer.hpp"
+#include "Planet.hpp"
 
 class SolarSystem {
 public:
@@ -26,13 +27,13 @@ public:
     SolarSystem& operator=(SolarSystem&& other) noexcept;
 
     void draw();
-    void update();
 
 private:
     void loadMesh(const std::filesystem::path& meshPath);
     void createGeometryBuffer(const aiScene* scene);
     void releaseResources();
 
+    std::vector<Planet> planets;
     GeometryBuffer geometryBuffer;
     std::vector<float> vertices;
     std::vector<unsigned int> indices;

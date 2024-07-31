@@ -4,6 +4,15 @@
 
 SolarSystem::SolarSystem(const std::filesystem::path& meshPath) {
     loadMesh(meshPath);
+    // name, size, distanceToSun, rotationSpeed, orbitSpeed, reverseRotation
+    planets.emplace_back("Mercury", 0.383f, 57.9f, 360.0f / 84.456f, 47.87f);
+    planets.emplace_back("Venus", 0.949f, 108.2f, 360.0f / 349.947f, 35.02f, true);  // Rotiert in entgegengesetzte Richtung
+    planets.emplace_back("Earth", 1.0f, 149.6f, 360.0f / 1.436f, 29.78f);
+    planets.emplace_back("Mars", 0.532f, 227.9f, 360.0f / 1.477f, 24.08f);
+    planets.emplace_back("Jupiter", 11.21f, 778.6f, 360.0f / 0.595f, 13.07f);
+    planets.emplace_back("Saturn", 9.45f, 1433.5f, 360.0f / 0.647f, 9.69f);
+    planets.emplace_back("Uranus", 4.01f, 2872.5f, 360.0f / 1.034f, 6.81f, true);  // Rotiert in entgegengesetzte Richtung
+    planets.emplace_back("Neptune", 3.88f, 4495.1f, 360.0f / 0.966f, 5.43f);
 }
 
 SolarSystem::~SolarSystem() {
@@ -93,8 +102,6 @@ void SolarSystem::draw() {
     geometryBuffer.unbind();
 }
 
-void SolarSystem::update() {
-}
 
 void SolarSystem::releaseResources() {
     std::cout << "solar system released" << std::endl;
