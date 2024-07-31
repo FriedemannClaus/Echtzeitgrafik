@@ -84,27 +84,48 @@ unsigned int indices[] =
     1, 2, 3    // second triangle
 };
 
-// Funktionen zur Initialisierung der Matrizen
-// void initMatrices(glm::mat4& model, glm::mat4& view, glm::mat4& projection)
-// {
-//     // Erstellen der Modelmatrix (Translation, Skalierung, Rotation)
-//     model = glm::mat4(1.0f); // Identitätsmatrix
-//     model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f)); // Beispiel: Verschieben
-//     model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Beispiel: Rotieren
-//     model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f)); // Beispiel: Skalieren
 
-//     // Erstellen der Viewmatrix (Kameraposition und -blickrichtung)
-//     view = glm::lookAt(
-//         glm::vec3(0.0f, 0.0f, 3.0f), // Kameraposition
-//         glm::vec3(0.0f, 0.0f, 0.0f), // Blickrichtung
-//         glm::vec3(0.0f, 1.0f, 0.0f)  // Up-Vektor
-//     );
+/* vertex data is passed as input to this shader
+ * ourColor is passed as input to the to the fragment shader. */
+static const GLchar* simpleVertexShaderSource =
+"#version 330 core\n"
+"layout (location = 0) in vec3 position;\n"
+"layout (location = 1) in vec3 color;\n"
+"out vec3 ourColor;\n"
+"void main() {\n"
+"    gl_Position = vec4(position, 1.0f);\n"
+"    ourColor = color;\n"
+"}\0";
 
-//     //Erstellen der Projektionsmatrix (Perspektivprojektion)
-//     projection = glm::perspective(
-//         glm::radians(45.0f), // Field of View
-//         4.0f / 3.0f,         // Seitenverhältnis
-//         0.1f,                // Near Plane
-//         100.0f               // Far Plane
-//     );
-// }
+static const GLchar* simpleFragmentShaderSource =
+"#version 330 core\n"
+"in vec3 ourColor;\n"
+"out vec4 color;\n"
+"void main() {\n"
+"    color = vec4(ourColor, 1.0f);\n"
+"}\0";
+
+static const GLchar* perspectiveVertexShaderSource =
+"#version 330 core\n"
+"layout (location = 0) in vec3 position;\n"
+"layout (location = 1) in vec3 color;\n"
+"uniform mat4 model;\n"
+"uniform mat4 view;\n"
+"uniform mat4 projection;\n"
+"out vec3 ourColor;\n"
+"\n"
+"void main()\n"
+"{\n"
+"    gl_Position = projection * view * model * vec4(position, 1.0);\n"
+"    ourColor = color;\n"
+"}\0";
+
+static const GLchar* perspectiveFragmentShaderSource =
+"#version 330 core\n"
+"in vec3 ourColor;\n"
+"out vec4 color;\n"
+"void main() {\n"
+"    color = vec4(ourColor, 1.0f);\n"
+"    //color = vec4(vec3(gl_FragCoord.z), 1.0);\n"
+"}\0";
+
