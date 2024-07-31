@@ -16,7 +16,7 @@ public:
     GeometryBuffer(GeometryBuffer&& other) noexcept;
     GeometryBuffer& operator=(GeometryBuffer&& other) noexcept;
 
-    void initialize(const std::vector<float>& vertices);
+    void initialize(const float* vertices, int size);
     void bind() const;
     void unbind() const;
     GLuint getVAO() const { return vao; }

@@ -40,10 +40,10 @@ void APIENTRY debugCallback(GLenum source, GLenum type, GLuint id, GLenum severi
 
 int main(int argc, char** argv)
 {
-	std::cout << "HelloTriangleRetained" << std::endl;
+    std::cout << "HelloTriangleRetained" << std::endl;
 
-	GLFWwindow* window = initAndCreateWindow();
-	glViewport(0, 0, WIDTH, HEIGHT);
+    GLFWwindow* window = initAndCreateWindow();
+    glViewport(0, 0, WIDTH, HEIGHT);
 
     std::filesystem::path simpleVertexShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.vert";
     std::filesystem::path simpleFragmentShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.frag";
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
     Shader shader(simpleVertexShaderPath, simpleFragmentShaderPath);
 
     GeometryBuffer geometryBuffer;
-    geometryBuffer.initialize(std::vector<float>(triangle, triangle + sizeof(triangle) / sizeof(triangle[0])));
+    geometryBuffer.initialize(cube, sizeof(cube));
 
     shader.use();
     glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
@@ -62,16 +62,15 @@ int main(int argc, char** argv)
         glClear(GL_COLOR_BUFFER_BIT);
 
         geometryBuffer.bind();
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         geometryBuffer.unbind();
 
+        updateFPS();
 
-		updateFPS();
+        glfwSwapBuffers(window);
 
-		glfwSwapBuffers(window);
-		
-		glfwPollEvents();
-	}
+        glfwPollEvents();
+    }
 
     geometryBuffer.~GeometryBuffer();
 
