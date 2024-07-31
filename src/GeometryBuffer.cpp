@@ -73,8 +73,6 @@ void GeometryBuffer::cleanUp() {
 }
 
 void GeometryBuffer::copyFrom(const GeometryBuffer& other) {
-    // Copy OpenGL resources. Note that this is not standard practice.
-    // You usually would need to reinitialize the resources.
     vao = other.vao;
     vbo = other.vbo;
 }
