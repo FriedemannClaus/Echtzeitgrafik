@@ -9,7 +9,7 @@
 
 class Planet {
 public:
-    Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, bool reverseRotation = false);
+    Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, GeometryBuffer& sharedBuffer, bool reverseRotation = false);
     ~Planet();
 
     // copy constructor
@@ -41,7 +41,8 @@ private:
     float currentRotationAngle;
     float currentOrbitAngle;
 
-    GeometryBuffer geometryBuffer;
+    GeometryBuffer& geometryBuffer;
 };
 
 #endif
+

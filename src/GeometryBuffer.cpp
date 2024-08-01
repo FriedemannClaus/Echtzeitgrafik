@@ -41,6 +41,8 @@ GeometryBuffer& GeometryBuffer::operator=(GeometryBuffer&& other) noexcept {
 }
 
 void GeometryBuffer::initialize(const float* vertices, int vertexSize, const unsigned int* indices, int indexSize) {
+    this->indexCount = indexSize;
+
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
@@ -90,3 +92,6 @@ void GeometryBuffer::copyFrom(const GeometryBuffer& other) {
     ebo = other.ebo;
 }
 
+size_t GeometryBuffer::getIndexCount() const {
+    return indexCount;
+}

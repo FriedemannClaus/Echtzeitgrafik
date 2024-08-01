@@ -2,7 +2,7 @@
 #define GEOMETRYBUFFER_H
 #pragma once
 
-#include <GL/glew.h> // Include GLEW (or any other OpenGL loader library)
+#include <GL/glew.h>
 #include <vector>
 
 class GeometryBuffer {
@@ -20,13 +20,14 @@ public:
     void bind() const;
     void unbind() const;
     void cleanUp();
-    GLuint getVAO() const { return vao; }
+    size_t getIndexCount() const;
 
 private:
     GLuint vao;
     GLuint vbo;
     GLuint ebo;
     void copyFrom(const GeometryBuffer& other);
+    size_t indexCount;
 };
 
 #endif // GEOMETRYBUFFER_H

@@ -110,6 +110,8 @@ int main(int argc, char** argv)
 		shader.setUniform("view", view);
 		shader.setUniform("projection", projection);
 
+		solarSystem.update(0.01f); 
+
 		solarSystem.draw();
 		updateFPS();
 		glfwSwapBuffers(window);
