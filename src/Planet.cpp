@@ -1,39 +1,18 @@
 #include "Planet.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-Planet::Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, GeometryBuffer& sharedBuffer, bool reverseRotation)
+Planet::Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, const std::filesystem::path& texturePath, GeometryBuffer& sharedBuffer, bool reverseRotation)
     : name(name), size(size), distanceToSun(distanceToSun), rotationSpeed(rotationSpeed), orbitSpeed(orbitSpeed), reverseRotation(reverseRotation),
-    currentRotationAngle(0.0f), currentOrbitAngle(0.0f), geometryBuffer(sharedBuffer) {}
+    currentRotationAngle(0.0f), currentOrbitAngle(0.0f), texture(texturePath), geometryBuffer(sharedBuffer) {}
 
 Planet::~Planet() {
-}
-
-Planet::Planet(const Planet& other)
-    : name(other.name), size(other.size), distanceToSun(other.distanceToSun),
-    rotationSpeed(other.rotationSpeed), orbitSpeed(other.orbitSpeed),
-    reverseRotation(other.reverseRotation), currentRotationAngle(other.currentRotationAngle),
-    currentOrbitAngle(other.currentOrbitAngle), geometryBuffer(other.geometryBuffer) {}
-
-Planet& Planet::operator=(const Planet& other) {
-    if (this != &other) {
-        name = other.name;
-        size = other.size;
-        distanceToSun = other.distanceToSun;
-        rotationSpeed = other.rotationSpeed;
-        orbitSpeed = other.orbitSpeed;
-        reverseRotation = other.reverseRotation;
-        currentRotationAngle = other.currentRotationAngle;
-        currentOrbitAngle = other.currentOrbitAngle;
-        geometryBuffer = other.geometryBuffer;
-    }
-    return *this;
 }
 
 Planet::Planet(Planet&& other) noexcept
     : name(std::move(other.name)), size(other.size), distanceToSun(other.distanceToSun),
     rotationSpeed(other.rotationSpeed), orbitSpeed(other.orbitSpeed),
     reverseRotation(other.reverseRotation), currentRotationAngle(other.currentRotationAngle),
-    currentOrbitAngle(other.currentOrbitAngle), geometryBuffer(other.geometryBuffer) {
+    currentOrbitAngle(other.currentOrbitAngle), geometryBuffer(other.geometryBuffer), texture(std::move(other.texture)) {
     other.size = 0.0f;
     other.distanceToSun = 0.0f;
     other.rotationSpeed = 0.0f;
@@ -53,6 +32,7 @@ Planet& Planet::operator=(Planet&& other) noexcept {
         currentRotationAngle = other.currentRotationAngle;
         currentOrbitAngle = other.currentOrbitAngle;
         geometryBuffer = other.geometryBuffer;
+        texture = std::move(other.texture);
 
         other.size = 0.0f;
         other.distanceToSun = 0.0f;
@@ -66,9 +46,11 @@ Planet& Planet::operator=(Planet&& other) noexcept {
 
 void Planet::draw(Shader& shader) {
 	shader.setUniform("model", modelMatrix);
+    texture.bind();
     geometryBuffer.bind();
     glDrawElements(GL_TRIANGLES, geometryBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
     geometryBuffer.unbind();
+    texture.unbind();
 }
 
 void Planet::update(float deltaTime) {
@@ -107,4 +89,8 @@ float Planet::getRotationSpeed() const {
 
 float Planet::getOrbitSpeed() const {
     return orbitSpeed;
+}
+
+const Texture& Planet::getTexture() const {
+    return texture;
 }

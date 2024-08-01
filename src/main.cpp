@@ -18,6 +18,7 @@
 #include "GeometryBuffer.hpp"
 #include "SolarSystem.hpp"
 #include "Camera.hpp"
+#include "Texture.hpp"
 
 double lastTime = 0.0;
 int frameCount = 0;
@@ -38,19 +39,19 @@ void togglePerspectiveProjection(GLFWwindow* window, int key, int scancode, int 
 }
 
 void updateFPS() {
-	double currentTime = glfwGetTime();
-	frameCount++;
+    double currentTime = glfwGetTime();
+    frameCount++;
 
-	if (currentTime - lastTime >= 1.0) { // Every second
-		fps = frameCount / static_cast<float>(currentTime - lastTime);
-		frameCount = 0;
-		lastTime = currentTime;
-		std::cout << "FPS: " << fps << std::endl;
-	}
+    if (currentTime - lastTime >= 1.0) { // Every second
+        fps = frameCount / static_cast<float>(currentTime - lastTime);
+        frameCount = 0;
+        lastTime = currentTime;
+        std::cout << "FPS: " << fps << std::endl;
+    }
 }
 
 void APIENTRY debugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
-	std::cerr << "OpenGL Debug Message: " << message << std::endl;
+    std::cerr << "OpenGL Debug Message: " << message << std::endl;
 }
 
 void processInput(GLFWwindow* window, float deltaTime) {
@@ -104,8 +105,13 @@ int main(int argc, char** argv)
 	std::filesystem::path simpleFragmentShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.frag";
 	Shader shader(simpleVertexShaderPath, simpleFragmentShaderPath);
 
-	std::filesystem::path meshPath = std::filesystem::path(ROOT_DIR) / "res/sphere.obj";
-	SolarSystem solarSystem{ meshPath };
+    std::filesystem::path meshPath = std::filesystem::path(ROOT_DIR) / "res/sphere.obj";
+    SolarSystem solarSystem{ meshPath };
+
+    std::filesystem::path texturePath = std::filesystem::path(ROOT_DIR) / "res/textures/2k_earth.jpg";
+    Texture texture(texturePath);
+    texture.setFiltering(GL_LINEAR, GL_LINEAR);
+    texture.setWrapping(GL_REPEAT, GL_REPEAT);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -116,6 +122,7 @@ int main(int argc, char** argv)
 
 	float deltaTime = 0.0f;
 	float lastFrame = 0.0f;
+	glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -141,7 +148,9 @@ int main(int argc, char** argv)
 		shader.setUniform("projection", projection);
 
 		solarSystem.update(0.01f); 
+		texture.bind();
 		solarSystem.draw(shader);
+		texture.unbind();
 
 		updateFPS();
 		glfwSwapBuffers(window);

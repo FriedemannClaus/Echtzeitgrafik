@@ -1,25 +1,24 @@
 #ifndef PLANET_HPP
 #define PLANET_HPP
-#pragma once
 
 #include <string>
-#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include "Shader.hpp"
+#include <filesystem>
+#include "Texture.hpp"
 #include "GeometryBuffer.hpp"
 
 class Planet {
 public:
-    Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, GeometryBuffer& sharedBuffer, bool reverseRotation = false);
+    Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, const std::filesystem::path& texturePath, GeometryBuffer& sharedBuffer, bool reverseRotation = false);
     ~Planet();
 
-    // copy constructor
-    Planet(const Planet& other);
-    // copy assignment
-    Planet& operator=(const Planet& other);
-    // move constructor
+    // Kopierkonstruktor und -zuweisung deaktivieren
+    Planet(const Planet& other) = delete;
+    Planet& operator=(const Planet& other) = delete;
+
+    // Move-Konstruktor und -zuweisung
     Planet(Planet&& other) noexcept;
-    // move assignment
     Planet& operator=(Planet&& other) noexcept;
 
     void draw(Shader& shader);
@@ -30,6 +29,7 @@ public:
     float getDistanceToSun() const;
     float getRotationSpeed() const;
     float getOrbitSpeed() const;
+    const Texture& getTexture() const;
 
 private:
     std::string name;
@@ -38,14 +38,12 @@ private:
     float rotationSpeed;
     float orbitSpeed;
     bool reverseRotation;
-
     float currentRotationAngle;
     float currentOrbitAngle;
-
     GeometryBuffer& geometryBuffer;
 
     glm::mat4 modelMatrix;
+    Texture texture; // Textur-Variable
 };
 
-#endif
-
+#endif // PLANET_HPP
