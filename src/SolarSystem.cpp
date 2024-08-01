@@ -75,9 +75,9 @@ void SolarSystem::loadMesh(const std::filesystem::path& meshPath) {
     geometryBuffer.initialize(vertices.data(), vertices.size(), indices.data(), indices.size());
 }
 
-void SolarSystem::draw() {
+void SolarSystem::draw(Shader& shader) {
     for (auto& planet : planets) {
-        planet.draw();
+        planet.draw(shader);
     }
 }
 

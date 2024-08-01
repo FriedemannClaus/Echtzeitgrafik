@@ -1,4 +1,5 @@
 #include "Planet.hpp"
+#include <glm/gtc/matrix_transform.hpp>
 
 Planet::Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, GeometryBuffer& sharedBuffer, bool reverseRotation)
     : name(name), size(size), distanceToSun(distanceToSun), rotationSpeed(rotationSpeed), orbitSpeed(orbitSpeed), reverseRotation(reverseRotation),
@@ -63,7 +64,8 @@ Planet& Planet::operator=(Planet&& other) noexcept {
     return *this;
 }
 
-void Planet::draw() {
+void Planet::draw(Shader& shader) {
+	shader.setUniform("model", modelMatrix);
     geometryBuffer.bind();
     glDrawElements(GL_TRIANGLES, geometryBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);
     geometryBuffer.unbind();
@@ -80,6 +82,11 @@ void Planet::update(float deltaTime) {
     if (currentOrbitAngle > 360.0f) {
         currentOrbitAngle -= 360.0f;
     }
+
+    modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(distanceToSun * cos(glm::radians(currentOrbitAngle)), 0.0f, distanceToSun * sin(glm::radians(currentOrbitAngle))));
+    modelMatrix = glm::rotate(modelMatrix, glm::radians(currentRotationAngle), glm::vec3(0.0f, 1.0f, 0.0f));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(size));
 }
 
 std::string Planet::getName() const {
