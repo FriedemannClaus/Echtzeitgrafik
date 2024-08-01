@@ -3,17 +3,20 @@
 
 #include <string>
 #include <glm/glm.hpp>
+#include <filesystem>
 #include "Texture.hpp"
 #include "GeometryBuffer.hpp"
 
 class Planet {
 public:
-    Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, const std::filesystem::path& texturePath, bool reverseRotation = false);
+    Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, const std::filesystem::path& texturePath, GeometryBuffer& sharedBuffer, bool reverseRotation = false);
     ~Planet();
 
+    // Kopierkonstruktor und -zuweisung deaktivieren
     Planet(const Planet& other) = delete;
     Planet& operator=(const Planet& other) = delete;
 
+    // Move-Konstruktor und -zuweisung
     Planet(Planet&& other) noexcept;
     Planet& operator=(Planet&& other) noexcept;
 
@@ -36,9 +39,8 @@ private:
     bool reverseRotation;
     float currentRotationAngle;
     float currentOrbitAngle;
-    GeometryBuffer geometryBuffer;
-    Texture texture;
+    GeometryBuffer& geometryBuffer;
+    Texture texture; // Textur-Variable
 };
 
-#endif
-
+#endif // PLANET_HPP

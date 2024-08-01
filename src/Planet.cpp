@@ -1,38 +1,17 @@
 #include "Planet.hpp"
 
-Planet::Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, const std::filesystem::path& texturePath, bool reverseRotation)
+Planet::Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, const std::filesystem::path& texturePath, GeometryBuffer& sharedBuffer, bool reverseRotation)
     : name(name), size(size), distanceToSun(distanceToSun), rotationSpeed(rotationSpeed), orbitSpeed(orbitSpeed), reverseRotation(reverseRotation),
-    currentRotationAngle(0.0f), currentOrbitAngle(0.0f), texture(texturePath) {}
+    currentRotationAngle(0.0f), currentOrbitAngle(0.0f), texture(texturePath), geometryBuffer(sharedBuffer) {}
 
 Planet::~Planet() {
-}
-
-Planet::Planet(const Planet& other)
-    : name(other.name), size(other.size), distanceToSun(other.distanceToSun),
-    rotationSpeed(other.rotationSpeed), orbitSpeed(other.orbitSpeed),
-    reverseRotation(other.reverseRotation), currentRotationAngle(other.currentRotationAngle),
-    currentOrbitAngle(other.currentOrbitAngle), geometryBuffer(other.geometryBuffer) {}
-
-Planet& Planet::operator=(const Planet& other) {
-    if (this != &other) {
-        name = other.name;
-        size = other.size;
-        distanceToSun = other.distanceToSun;
-        rotationSpeed = other.rotationSpeed;
-        orbitSpeed = other.orbitSpeed;
-        reverseRotation = other.reverseRotation;
-        currentRotationAngle = other.currentRotationAngle;
-        currentOrbitAngle = other.currentOrbitAngle;
-        geometryBuffer = other.geometryBuffer;
-    }
-    return *this;
 }
 
 Planet::Planet(Planet&& other) noexcept
     : name(std::move(other.name)), size(other.size), distanceToSun(other.distanceToSun),
     rotationSpeed(other.rotationSpeed), orbitSpeed(other.orbitSpeed),
     reverseRotation(other.reverseRotation), currentRotationAngle(other.currentRotationAngle),
-    currentOrbitAngle(other.currentOrbitAngle), geometryBuffer(other.geometryBuffer) {
+    currentOrbitAngle(other.currentOrbitAngle), geometryBuffer(other.geometryBuffer), texture(std::move(other.texture)) {
     other.size = 0.0f;
     other.distanceToSun = 0.0f;
     other.rotationSpeed = 0.0f;
@@ -51,7 +30,7 @@ Planet& Planet::operator=(Planet&& other) noexcept {
         reverseRotation = other.reverseRotation;
         currentRotationAngle = other.currentRotationAngle;
         currentOrbitAngle = other.currentOrbitAngle;
-        geometryBuffer = std::move(other.geometryBuffer);
+        geometryBuffer = other.geometryBuffer;
         texture = std::move(other.texture);
 
         other.size = 0.0f;

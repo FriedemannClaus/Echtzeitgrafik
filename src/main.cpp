@@ -57,9 +57,6 @@ int main(int argc, char** argv) {
 
     std::filesystem::path simpleVertexShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.vert";
     std::filesystem::path simpleFragmentShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.frag";
-
-	std::filesystem::path simpleVertexShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.vert";
-	std::filesystem::path simpleFragmentShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.frag";
 	Shader shader(simpleVertexShaderPath, simpleFragmentShaderPath);
 
     std::filesystem::path meshPath = std::filesystem::path(ROOT_DIR) / "res/sphere.obj";
@@ -88,10 +85,6 @@ int main(int argc, char** argv) {
 	glfwSetKeyCallback(window, togglePerspectiveProjection);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
 	shader.use();
-
-    while (!glfwWindowShouldClose(window)) {
-        glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	while (!glfwWindowShouldClose(window))
 	{

@@ -34,6 +34,6 @@ void main()
     vec3 specular = specularStr * pow(max(dot(viewDir, reflectDir), 0.0001), 32) * lightColor;
 
     
-    vec3 result = (ambient + diffuse + specular) * texture(texture1, TexCoord);
-    FragColor = vec4(result, 1.0);
+    vec3 result = (ambient + diffuse + specular);
+    FragColor = vec4(result, 1.0) * texture(texture1, TexCoord);
 }
