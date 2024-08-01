@@ -6,6 +6,7 @@
 #include <filesystem>
 #include "Planet.hpp"
 #include "GeometryBuffer.hpp"
+#include "Shader.hpp"
 
 class SolarSystem {
 public:
@@ -17,7 +18,7 @@ public:
     SolarSystem(SolarSystem&& other) noexcept;
     SolarSystem& operator=(SolarSystem&& other) noexcept;
 
-    void draw();
+    void draw(Shader& shader);
     void update(float deltaTime);
 
 private:

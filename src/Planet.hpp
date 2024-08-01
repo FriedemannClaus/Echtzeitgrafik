@@ -5,6 +5,7 @@
 #include <string>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include "Shader.hpp"
 #include "GeometryBuffer.hpp"
 
 class Planet {
@@ -21,7 +22,7 @@ public:
     // move assignment
     Planet& operator=(Planet&& other) noexcept;
 
-    void draw();
+    void draw(Shader& shader);
     void update(float deltaTime);
 
     std::string getName() const;
@@ -42,6 +43,8 @@ private:
     float currentOrbitAngle;
 
     GeometryBuffer& geometryBuffer;
+
+    glm::mat4 modelMatrix;
 };
 
 #endif

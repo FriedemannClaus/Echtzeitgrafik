@@ -141,7 +141,7 @@ int main(int argc, char** argv)
 		shader.setUniform("projection", projection);
 
 		solarSystem.update(0.01f); 
-		solarSystem.draw();
+		solarSystem.draw(shader);
 
 		updateFPS();
 		glfwSwapBuffers(window);
