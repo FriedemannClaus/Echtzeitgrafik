@@ -3,19 +3,21 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <iostream>
+#include <utility>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 
 SolarSystem::SolarSystem(const std::filesystem::path& meshPath) {
     loadMesh(meshPath);
-    // name, size, distanceToSun, rotationSpeed, orbitSpeed, sharedBuffer, reverseRotation
-    planets.emplace_back("Sun", 109.0f, 0.0f, 360.0f / 600.0f, 0.0f, geometryBuffer);
-    planets.emplace_back("Mercury", 0.383f, 57.9f, 360.0f / 84.456f, 47.87f, geometryBuffer);
-    planets.emplace_back("Venus", 0.949f, 108.2f, 360.0f / 349.947f, 35.02f, geometryBuffer, true);  // Rotates in opposite direction
-    planets.emplace_back("Earth", 1.0f, 149.6f, 360.0f / 1.436f, 29.78f, geometryBuffer);
-    planets.emplace_back("Mars", 0.532f, 227.9f, 360.0f / 1.477f, 24.08f, geometryBuffer);
-    planets.emplace_back("Jupiter", 11.21f, 778.6f, 360.0f / 0.595f, 13.07f, geometryBuffer);
-    planets.emplace_back("Saturn", 9.45f, 1433.5f, 360.0f / 0.647f, 9.69f, geometryBuffer);
-    planets.emplace_back("Uranus", 4.01f, 2872.5f, 360.0f / 1.034f, 6.81f, geometryBuffer, true);  // Rotates in opposite direction
-    planets.emplace_back("Neptune", 3.88f, 4495.1f, 360.0f / 0.966f, 5.43f, geometryBuffer);
+
+    planets.emplace_back("Mercury", 0.383f, 57.9f, 360.0f / 84.456f, 47.87f, "../../../res/textures/2k_mercury.jpg", geometryBuffer);
+    planets.emplace_back("Venus", 0.949f, 108.2f, 360.0f / 349.947f, 35.02f, "../../../res/textures/2k_venus.jpg",geometryBuffer, true); // Rotates in opposite direction
+    planets.emplace_back("Earth", 1.0f, 149.6f, 360.0f / 1.436f, 29.78f, "../../../res/textures/2k_earth.jpg", geometryBuffer);
+    planets.emplace_back("Mars", 0.532f, 227.9f, 360.0f / 1.477f, 24.08f, "../../../res/textures/2k_mars.jpg", geometryBuffer);
+    planets.emplace_back("Jupiter", 11.21f, 778.6f, 360.0f / 0.595f, 13.07f, "../../../res/textures/2k_jupiter.jpg", geometryBuffer);
+    planets.emplace_back("Saturn", 9.45f, 1433.5f, 360.0f / 0.647f, 9.69f, "../../../res/textures/2k_saturn.jpg", geometryBuffer);
+    planets.emplace_back("Uranus", 4.01f, 2872.5f, 360.0f / 1.034f, 6.81f, "../../../res/textures/2k_uranus.jpg", geometryBuffer, true); // Rotates in opposite direction
+    planets.emplace_back("Neptune", 3.88f, 4495.1f, 360.0f / 0.966f, 5.43f, "../../../res/textures/2k_neptune.jpg", geometryBuffer);
 }
 
 SolarSystem::~SolarSystem() {
@@ -32,6 +34,7 @@ SolarSystem& SolarSystem::operator=(SolarSystem&& other) noexcept {
         geometryBuffer = std::move(other.geometryBuffer);
         vertices = std::move(other.vertices);
         indices = std::move(other.indices);
+        planets = std::move(other.planets);
     }
     return *this;
 }
@@ -44,6 +47,7 @@ void SolarSystem::loadMesh(const std::filesystem::path& meshPath) {
         std::cerr << "Error: " << importer.GetErrorString() << std::endl;
         return;
     }
+    // createGeometryBuffer(scene); Todo: Wieder einkommentieren?
 
     aiMesh* mesh = scene->mMeshes[0];
     for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
@@ -76,9 +80,14 @@ void SolarSystem::loadMesh(const std::filesystem::path& meshPath) {
 }
 
 void SolarSystem::draw() {
+    geometryBuffer.bind();
     for (auto& planet : planets) {
-        planet.draw();
+        planet.getTexture().bind();
+        // Transformationslogik für die Planeten
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
+        planet.getTexture().unbind();
     }
+    geometryBuffer.unbind();
 }
 
 void SolarSystem::update(float deltaTime) {

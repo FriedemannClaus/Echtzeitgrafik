@@ -2,8 +2,10 @@
 #define SOLAR_SYSTEM_HPP
 
 #include <vector>
-#include <string>
 #include <filesystem>
+#include <assimp/scene.h>
+#include <glm/glm.hpp>
+#include "GeometryBuffer.hpp"
 #include "Planet.hpp"
 #include "GeometryBuffer.hpp"
 
@@ -24,12 +26,10 @@ private:
     void loadMesh(const std::filesystem::path& meshPath);
     void releaseResources();
 
-    std::vector<Planet> planets;
     GeometryBuffer geometryBuffer;
     std::vector<float> vertices;
     std::vector<unsigned int> indices;
+    std::vector<Planet> planets;
 };
 
 #endif
-
-
