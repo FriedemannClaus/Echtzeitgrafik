@@ -17,12 +17,18 @@
 #include "Shader.hpp"
 #include "GeometryBuffer.hpp"
 #include "SolarSystem.hpp"
+#include "Camera.hpp"
 
 double lastTime = 0.0;
 int frameCount = 0;
 float fps = 0.0f;
 
 static bool usePerspectiveProjection = true;
+Camera camera(glm::vec3(0.0f, 0.0f, 20.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
+float lastX = WIDTH / 2.0f;
+float lastY = HEIGHT / 2.0f;
+bool firstMouse = true;
+glm::mat4 projection;
 
 void togglePerspectiveProjection(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
@@ -30,7 +36,6 @@ void togglePerspectiveProjection(GLFWwindow* window, int key, int scancode, int 
 		std::cout << (usePerspectiveProjection ? "Wechsel zu Perspektivprojektion" : "Wechsel zu Orthogonaler Projektion") << std::endl;
 	}
 }
-
 
 void updateFPS() {
 	double currentTime = glfwGetTime();
@@ -48,11 +53,50 @@ void APIENTRY debugCallback(GLenum source, GLenum type, GLuint id, GLenum severi
 	std::cerr << "OpenGL Debug Message: " << message << std::endl;
 }
 
+void processInput(GLFWwindow* window, float deltaTime) {
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		std::cout << "W " << deltaTime << std::endl;
+		camera.processKeyboard(GLFW_KEY_W, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		std::cout << "S " << deltaTime << std::endl;
+		camera.processKeyboard(GLFW_KEY_S, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		std::cout << "A " << deltaTime << std::endl;
+		camera.processKeyboard(GLFW_KEY_A, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		std::cout << "D " << deltaTime << std::endl;
+		camera.processKeyboard(GLFW_KEY_D, deltaTime);
+}
+
+void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+	if (firstMouse) {
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos; // Reversed since y-coordinates go from bottom to top
+
+	lastX = xpos;
+	lastY = ypos;
+
+	camera.processMouseMovement(xoffset, yoffset);
+}
+
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+	camera.processMouseScroll(yoffset);
+}
+
+void printDebugInfo(const Camera& camera, const SolarSystem& solarSystem) {
+	glm::vec3 camPos = camera.getPosition();
+	std::cout << "Camera Position: (" << camPos.x << ", " << camPos.y << ", " << camPos.z << ")" << std::endl;
+
+}
+
 
 int main(int argc, char** argv)
 {
-	std::cout << "HelloTriangleRetained" << std::endl;
-
 	GLFWwindow* window = initAndCreateWindow();
 	glViewport(0, 0, WIDTH, HEIGHT);
 
@@ -65,42 +109,40 @@ int main(int argc, char** argv)
 
 	glEnable(GL_DEPTH_TEST);
 
-	glm::mat4 model, view, projection;
-
-	model = glm::mat4(1.0f); // Identity matrix, cube starts at origin
-	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // Position it at the origin
-	model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Example: Rotation
-	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f)); // Example: Scaling
-
-	view = glm::lookAt(
-		glm::vec3(0.0f, 0.0f, 3.0f), // Camera position
-		glm::vec3(0.0f, 0.0f, 0.0f), // Look-at point
-		glm::vec3(0.0f, 1.0f, 0.0f)  // Up vector
-	);
-
 	glfwSetKeyCallback(window, togglePerspectiveProjection);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
+	glfwSetCursorPosCallback(window, mouseCallback);
+	glfwSetScrollCallback(window, scrollCallback);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+	float deltaTime = 0.0f;
+	float lastFrame = 0.0f;
 
 	while (!glfwWindowShouldClose(window))
 	{
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		processInput(window, deltaTime);
+
 		if (usePerspectiveProjection) {
 			projection = glm::perspective(glm::radians(45.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
 		}
 		else {
 			projection = glm::ortho(-4.0f, 4.0f, -3.0f, 3.0f, 0.1f, 1000.0f);
 		}
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
 
 		shader.use();
-		shader.setUniform("model", model);
-		shader.setUniform("view", view);
+
+		shader.setUniform("model", glm::mat4(1.0f));
+		shader.setUniform("view", camera.getViewMatrix());
 		shader.setUniform("projection", projection);
 
 		solarSystem.update(0.01f); 
-
 		solarSystem.draw();
+
 		updateFPS();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
