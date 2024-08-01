@@ -9,6 +9,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include "helper/RootDir.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "shared/data.h"
 #include "shared/functions.h"
@@ -20,6 +21,15 @@
 double lastTime = 0.0;
 int frameCount = 0;
 float fps = 0.0f;
+
+static bool usePerspectiveProjection = true;
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+		usePerspectiveProjection = !usePerspectiveProjection;
+		std::cout << (usePerspectiveProjection ? "Wechsel zu Perspektivprojektion" : "Wechsel zu Orthogonaler Projektion") << std::endl;
+	}
+}
 
 
 void updateFPS() {
@@ -54,14 +64,52 @@ int main(int argc, char** argv)
 	std::filesystem::path meshPath = std::filesystem::path(ROOT_DIR) / "res/sphere.obj";
 	SolarSystem solarSystem{ meshPath };
 
-	shader.use();
+	glEnable(GL_DEPTH_TEST);
+
+	glm::mat4 model, view, projection;
+
+	model = glm::mat4(1.0f); // Identity matrix, cube starts at origin
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // Position it at the origin
+	model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // Example: Rotation
+	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f)); // Example: Scaling
+
+	view = glm::lookAt(
+		glm::vec3(0.0f, 0.0f, 3.0f), // Camera position
+		glm::vec3(0.0f, 0.0f, 0.0f), // Look-at point
+		glm::vec3(0.0f, 1.0f, 0.0f)  // Up vector
+	);
+
+	// Initialize projection matrix
+	projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+
+	glfwSetKeyCallback(window, keyCallback);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
 
 
 	while (!glfwWindowShouldClose(window))
 	{
+		if (usePerspectiveProjection) {
+			projection = glm::perspective(
+				glm::radians(45.0f),
+				4.0f / 3.0f,
+				0.1f,
+				100.0f
+			);
+		}
+		else {
+			projection = glm::ortho(
+				-1.0f, 1.0f,
+				-1.0f, 1.0f,
+				0.1f, 100.0f
+			);
+		}
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+
+		shader.use();
+		shader.setUniform("model", model);
+		shader.setUniform("view", view);
+		shader.setUniform("projection", projection);
 
 		solarSystem.draw();
 		updateFPS();
