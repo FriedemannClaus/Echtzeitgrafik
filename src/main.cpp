@@ -24,7 +24,7 @@ float fps = 0.0f;
 
 static bool usePerspectiveProjection = true;
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void togglePerspectiveProjection(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
 		usePerspectiveProjection = !usePerspectiveProjection;
 		std::cout << (usePerspectiveProjection ? "Wechsel zu Perspektivprojektion" : "Wechsel zu Orthogonaler Projektion") << std::endl;
@@ -58,7 +58,6 @@ int main(int argc, char** argv)
 
 	std::filesystem::path simpleVertexShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.vert";
 	std::filesystem::path simpleFragmentShaderPath = std::filesystem::path(ROOT_DIR) / "res/shader.frag";
-
 	Shader shader(simpleVertexShaderPath, simpleFragmentShaderPath);
 
 	std::filesystem::path meshPath = std::filesystem::path(ROOT_DIR) / "res/sphere.obj";
@@ -82,7 +81,7 @@ int main(int argc, char** argv)
 	// Initialize projection matrix
 	projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 
-	glfwSetKeyCallback(window, keyCallback);
+	glfwSetKeyCallback(window, togglePerspectiveProjection);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
 
 
@@ -117,9 +116,6 @@ int main(int argc, char** argv)
 		glfwPollEvents();
 	}
 
-	solarSystem.~SolarSystem();
-
 	glfwTerminate();
-
 	return 0;
 }

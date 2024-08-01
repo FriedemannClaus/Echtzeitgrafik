@@ -21,7 +21,7 @@ SolarSystem::~SolarSystem() {
 
 SolarSystem::SolarSystem(const SolarSystem& other)
     : vertices(other.vertices), indices(other.indices) {
-    geometryBuffer.initialize(vertices.data(), vertices.size());
+    geometryBuffer.initialize(vertices.data(), vertices.size(), indices.data(), indices.size());
 }
 
 SolarSystem& SolarSystem::operator=(const SolarSystem& other) {
@@ -31,7 +31,7 @@ SolarSystem& SolarSystem::operator=(const SolarSystem& other) {
         vertices = other.vertices;
         indices = other.indices;
         geometryBuffer = other.geometryBuffer;
-        geometryBuffer.initialize(vertices.data(), vertices.size());
+        geometryBuffer.initialize(vertices.data(), vertices.size(), indices.data(), indices.size());
 
     }
     return *this;
@@ -92,13 +92,13 @@ void SolarSystem::createGeometryBuffer(const aiScene* scene) {
         }
     }
 
-    geometryBuffer.initialize(vertices.data(), vertices.size());
+    geometryBuffer.initialize(vertices.data(), vertices.size(), indices.data(), indices.size());
 }
 
 
 void SolarSystem::draw() {
     geometryBuffer.bind();
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     geometryBuffer.unbind();
 }
 

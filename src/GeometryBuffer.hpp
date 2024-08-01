@@ -16,7 +16,7 @@ public:
     GeometryBuffer(GeometryBuffer&& other) noexcept;
     GeometryBuffer& operator=(GeometryBuffer&& other) noexcept;
 
-    void initialize(const float* vertices, int size);
+    void initialize(const float* vertices, int vertexSize, const unsigned int* indices, int indexSize);
     void bind() const;
     void unbind() const;
     void cleanUp();
