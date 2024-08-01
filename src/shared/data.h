@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 
-static const GLuint WIDTH = 800, HEIGHT = 600;
+static const GLuint WIDTH = 1600, HEIGHT = 1200;
 static const GLuint INFOLOG_LEN = 512;
 
 GLfloat triangle[] = 

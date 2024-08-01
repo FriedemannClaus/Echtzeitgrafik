@@ -11,16 +11,18 @@ SolarSystem::SolarSystem(const std::filesystem::path& meshPath) {
     loadMesh(meshPath);
 
     float scalingOrbitSpeed = 1.0f/300.0f;
+    float scalingRotationSpeed = 1.0f / 1000.0f;
+    float scalingPlanetSize = 10.f;
     // name, size, distanceToSun, rotationSpeed, orbitSpeed, texturePath, sharedBuffer, reverseRotation
-    planets.emplace_back("Sun", 10.0f, 0.0f, 360.0f / 600.0f, 0.0f, "../../../res/textures/2k_sun.jpg", geometryBuffer);
-    planets.emplace_back("Mercury", 3.0f, 57.9f, 360.0f / 84.456f, 47.87f * scalingOrbitSpeed, "../../../res/textures/2k_mercury.jpg", geometryBuffer);
-    planets.emplace_back("Venus", 5.0f, 108.2f, 360.0f / 349.947f, 35.02f * scalingOrbitSpeed, "../../../res/textures/2k_venus.jpg",geometryBuffer, true); // Rotates in opposite direction
-    planets.emplace_back("Earth", 1.0f * 10.0f, 149.6f, 360.0f / 1.436f, 29.78f * scalingOrbitSpeed, "../../../res/textures/2k_earth.jpg", geometryBuffer);
-    planets.emplace_back("Mars", 0.532f * 10.0f, 227.9f, 360.0f / 1.477f, 24.08f * scalingOrbitSpeed, "../../../res/textures/2k_mars.jpg", geometryBuffer);
-    planets.emplace_back("Jupiter", 11.21f * 10.0f, 778.6f, 360.0f / 0.595f, 13.07f * scalingOrbitSpeed, "../../../res/textures/2k_jupiter.jpg", geometryBuffer);
-    planets.emplace_back("Saturn", 9.45f * 10.0f, 1433.5f, 360.0f / 0.647f, 9.69f * scalingOrbitSpeed, "../../../res/textures/2k_saturn.jpg", geometryBuffer);
-    planets.emplace_back("Uranus", 4.01f * 10.0f, 2872.5f, 360.0f / 1.034f, 6.81f * scalingOrbitSpeed, "../../../res/textures/2k_uranus.jpg", geometryBuffer, true); // Rotates in opposite direction
-    planets.emplace_back("Neptune", 3.88f * 10.0f, 4495.1f, 360.0f / 0.966f, 5.43f * scalingOrbitSpeed, "../../../res/textures/2k_neptune.jpg", geometryBuffer);
+    planets.emplace_back("Sun", 109.0f, 0.0f, scalingRotationSpeed * 360.0f / 600.0f, 0.0f, "../../../res/textures/2k_sun.jpg", geometryBuffer);
+    planets.emplace_back("Mercury", 0.383f * scalingPlanetSize, 57.9f, scalingRotationSpeed * 360.0f / 84.456f, 47.87f * scalingOrbitSpeed, "../../../res/textures/2k_mercury.jpg", geometryBuffer);
+    planets.emplace_back("Venus", 0.949f * scalingPlanetSize, 108.2f, scalingRotationSpeed * 360.0f / 349.947f, 35.02f * scalingOrbitSpeed, "../../../res/textures/2k_venus.jpg",geometryBuffer, true); // Rotates in opposite direction
+    planets.emplace_back("Earth", 1.0f * scalingPlanetSize, 149.6f, scalingRotationSpeed * 360.0f / 1.436f, 29.78f * scalingOrbitSpeed, "../../../res/textures/2k_earth.jpg", geometryBuffer);
+    planets.emplace_back("Mars", 0.532f * scalingPlanetSize, 227.9f, scalingRotationSpeed * 360.0f / 1.477f, 24.08f * scalingOrbitSpeed, "../../../res/textures/2k_mars.jpg", geometryBuffer);
+    planets.emplace_back("Jupiter", 11.21f * scalingPlanetSize, 778.6f, scalingRotationSpeed * 360.0f / 0.595f, 13.07f * scalingOrbitSpeed, "../../../res/textures/2k_jupiter.jpg", geometryBuffer);
+    planets.emplace_back("Saturn", 9.45f * scalingPlanetSize, 1433.5f, scalingRotationSpeed * 360.0f / 0.647f, 9.69f * scalingOrbitSpeed, "../../../res/textures/2k_saturn.jpg", geometryBuffer);
+    planets.emplace_back("Uranus", 4.01f * scalingPlanetSize, 2872.5f, scalingRotationSpeed * 360.0f / 1.034f, 6.81f * scalingOrbitSpeed, "../../../res/textures/2k_uranus.jpg", geometryBuffer, true); // Rotates in opposite direction
+    planets.emplace_back("Neptune", 3.88f * scalingPlanetSize, 4495.1f, scalingRotationSpeed * 360.0f / 0.966f, 5.43f * scalingOrbitSpeed, "../../../res/textures/2k_neptune.jpg", geometryBuffer);
 
 }
 

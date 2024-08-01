@@ -1,5 +1,6 @@
 #include "Camera.hpp"
 #include <GLFW/glfw3.h>
+#include <iostream>
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
     : position(position), worldUp(up), yaw(yaw), pitch(pitch), front(glm::vec3(0.0f, 0.0f, -1.0f)),
@@ -12,7 +13,7 @@ glm::mat4 Camera::getViewMatrix() const {
 }
 
 void Camera::processKeyboard(int direction, float deltaTime) {
-    float velocity = movementSpeed * deltaTime;
+    float velocity = movementSpeed * deltaTime * 40;
     if (direction == GLFW_KEY_W)
         position += front * velocity;
     if (direction == GLFW_KEY_S)

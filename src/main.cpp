@@ -25,7 +25,7 @@ int frameCount = 0;
 float fps = 0.0f;
 
 static bool usePerspectiveProjection = true;
-Camera camera(glm::vec3(0.0f, 0.0f, 20.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
+Camera camera(glm::vec3(0.0f, 0.0f, 200.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
 float lastX = WIDTH / 2.0f;
 float lastY = HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -56,16 +56,12 @@ void APIENTRY debugCallback(GLenum source, GLenum type, GLuint id, GLenum severi
 
 void processInput(GLFWwindow* window, float deltaTime) {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		std::cout << "W " << deltaTime << std::endl;
 		camera.processKeyboard(GLFW_KEY_W, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		std::cout << "S " << deltaTime << std::endl;
 		camera.processKeyboard(GLFW_KEY_S, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		std::cout << "A " << deltaTime << std::endl;
 		camera.processKeyboard(GLFW_KEY_A, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		std::cout << "D " << deltaTime << std::endl;
 		camera.processKeyboard(GLFW_KEY_D, deltaTime);
 }
 
@@ -87,12 +83,6 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 
 void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
 	camera.processMouseScroll(yoffset);
-}
-
-void printDebugInfo(const Camera& camera, const SolarSystem& solarSystem) {
-	glm::vec3 camPos = camera.getPosition();
-	std::cout << "Camera Position: (" << camPos.x << ", " << camPos.y << ", " << camPos.z << ")" << std::endl;
-
 }
 
 
@@ -132,7 +122,7 @@ int main(int argc, char** argv)
 		processInput(window, deltaTime);
 
 		if (usePerspectiveProjection) {
-			projection = glm::perspective(glm::radians(45.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
+			projection = glm::perspective(glm::radians(45.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 10000.0f);
 		}
 		else {
 			projection = glm::ortho(-4.0f, 4.0f, -3.0f, 3.0f, 0.1f, 1000.0f);
