@@ -1,39 +1,22 @@
 #include "Planet.hpp"
 
-Planet::Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, bool reverseRotation)
+Planet::Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, const std::filesystem::path& texturePath, bool reverseRotation)
     : name(name), size(size), distanceToSun(distanceToSun), rotationSpeed(rotationSpeed), orbitSpeed(orbitSpeed), reverseRotation(reverseRotation),
-    currentRotationAngle(0.0f), currentOrbitAngle(0.0f) {}
+    currentRotationAngle(0.0f), currentOrbitAngle(0.0f), texture(texturePath) {}
 
 Planet::~Planet() {
     geometryBuffer.cleanUp();
 }
 
-Planet::Planet(const Planet& other)
-    : name(other.name), size(other.size), distanceToSun(other.distanceToSun),
-    rotationSpeed(other.rotationSpeed), orbitSpeed(other.orbitSpeed),
-    currentRotationAngle(other.currentRotationAngle), currentOrbitAngle(other.currentOrbitAngle) {
-    geometryBuffer = other.geometryBuffer;
-}
-
-Planet& Planet::operator=(const Planet& other) {
-    if (this != &other) {
-        name = other.name;
-        size = other.size;
-        distanceToSun = other.distanceToSun;
-        rotationSpeed = other.rotationSpeed;
-        orbitSpeed = other.orbitSpeed;
-        currentRotationAngle = other.currentRotationAngle;
-        currentOrbitAngle = other.currentOrbitAngle;
-        geometryBuffer = other.geometryBuffer;
-    }
-    return *this;
-}
+// Kopierkonstruktor und Copy-Zuweisungsoperator löschen
+// Planet::Planet(const Planet& other) = delete;
+// Planet& Planet::operator=(const Planet& other) = delete;
 
 Planet::Planet(Planet&& other) noexcept
     : name(std::move(other.name)), size(other.size), distanceToSun(other.distanceToSun),
     rotationSpeed(other.rotationSpeed), orbitSpeed(other.orbitSpeed),
     currentRotationAngle(other.currentRotationAngle), currentOrbitAngle(other.currentOrbitAngle),
-    geometryBuffer(std::move(other.geometryBuffer)) {
+    geometryBuffer(std::move(other.geometryBuffer)), texture(std::move(other.texture)) {
     other.size = 0.0f;
     other.distanceToSun = 0.0f;
     other.rotationSpeed = 0.0f;
@@ -52,6 +35,7 @@ Planet& Planet::operator=(Planet&& other) noexcept {
         currentRotationAngle = other.currentRotationAngle;
         currentOrbitAngle = other.currentOrbitAngle;
         geometryBuffer = std::move(other.geometryBuffer);
+        texture = std::move(other.texture);
 
         other.size = 0.0f;
         other.distanceToSun = 0.0f;
@@ -64,9 +48,11 @@ Planet& Planet::operator=(Planet&& other) noexcept {
 }
 
 void Planet::draw() {
+    texture.bind();
     geometryBuffer.bind();
     glDrawArrays(GL_TRIANGLES, 0, 6);
     geometryBuffer.unbind();
+    texture.unbind();
 }
 
 void Planet::update(float deltaTime) {
@@ -100,4 +86,8 @@ float Planet::getRotationSpeed() const {
 
 float Planet::getOrbitSpeed() const {
     return orbitSpeed;
+}
+
+const Texture& Planet::getTexture() const {
+    return texture;
 }

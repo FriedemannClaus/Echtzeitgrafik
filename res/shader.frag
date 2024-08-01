@@ -1,6 +1,10 @@
 #version 410 core
-in vec3 ourColor;
-out vec4 color;
+
+in vec2 TexCoord; // Eingabe der Texturkoordinaten
+out vec4 FragColor;
+
+uniform sampler2D texture1; // Die Textur, die wir anwenden wollen
+
 void main() {
-	color = vec4(ourColor, 1.0f);
-} 
+    FragColor = texture(texture1, TexCoord);
+}
