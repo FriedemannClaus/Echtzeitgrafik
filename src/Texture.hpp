@@ -10,11 +10,9 @@ public:
     Texture(const std::filesystem::path& filePath, GLenum target = GL_TEXTURE_2D);
     ~Texture();
 
-    // Kopierkonstruktor und -zuweisung deaktivieren
     Texture(const Texture&) = delete;
     Texture& operator=(const Texture&) = delete;
 
-    // Move-Konstruktor und -zuweisung
     Texture(Texture&& other) noexcept;
     Texture& operator=(Texture&& other) noexcept;
 
@@ -31,4 +29,4 @@ private:
     void loadTexture(const std::filesystem::path& filePath);
 };
 
-#endif // TEXTURE_H
+#endif

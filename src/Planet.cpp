@@ -8,10 +8,6 @@ Planet::~Planet() {
     geometryBuffer.cleanUp();
 }
 
-// Kopierkonstruktor und Copy-Zuweisungsoperator löschen
-// Planet::Planet(const Planet& other) = delete;
-// Planet& Planet::operator=(const Planet& other) = delete;
-
 Planet::Planet(Planet&& other) noexcept
     : name(std::move(other.name)), size(other.size), distanceToSun(other.distanceToSun),
     rotationSpeed(other.rotationSpeed), orbitSpeed(other.orbitSpeed),

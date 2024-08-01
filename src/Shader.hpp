@@ -11,11 +11,9 @@ public:
     Shader(const std::filesystem::path& vertexPath, const std::filesystem::path& fragmentPath);
     ~Shader();
 
-    // Kopierkonstruktor und -zuweisung deaktivieren
     Shader(const Shader&) = delete;
     Shader& operator=(const Shader&) = delete;
 
-    // Move-Konstruktor und -zuweisung
     Shader(Shader&& other) noexcept;
     Shader& operator=(Shader&& other) noexcept; //Todo: wieso noexcept?
 

@@ -7,7 +7,6 @@
 SolarSystem::SolarSystem(const std::filesystem::path& meshPath) {
     loadMesh(meshPath);
 
-    // Planeten initialisieren mit Namen, Größe, Entfernung zur Sonne, Rotationsgeschwindigkeit, Orbitgeschwindigkeit und Texturpfad
     planets.emplace_back("Mercury", 0.383f, 57.9f, 360.0f / 84.456f, 47.87f, "../../../res/textures/2k_mercury.jpg");
     planets.emplace_back("Venus", 0.949f, 108.2f, 360.0f / 349.947f, 35.02f, "../../../res/textures/2k_venus.jpg", true);
     planets.emplace_back("Earth", 1.0f, 149.6f, 360.0f / 1.436f, 29.78f, "../../../res/textures/2k_earth.jpg");
@@ -21,8 +20,6 @@ SolarSystem::SolarSystem(const std::filesystem::path& meshPath) {
 SolarSystem::~SolarSystem() {
     releaseResources();
 }
-
-// Kopierkonstruktor und -zuweisung sind gelöscht, also entfernen wir diese Implementierungen
 
 SolarSystem::SolarSystem(SolarSystem&& other) noexcept
     : geometryBuffer(std::move(other.geometryBuffer)), vertices(std::move(other.vertices)), indices(std::move(other.indices)), planets(std::move(other.planets)) {}
@@ -85,11 +82,10 @@ void SolarSystem::createGeometryBuffer(const aiScene* scene) {
 void SolarSystem::draw() {
     geometryBuffer.bind();
     for (auto& planet : planets) {
-        planet.getTexture().bind(); // Textur binden
-        // Hier können Sie die Planeten transformieren und zeichnen
-        // Transformationslogik für die Planeten (z.B. Translation basierend auf der Entfernung zur Sonne)
+        planet.getTexture().bind();
+        // Transformationslogik für die Planeten
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
-        planet.getTexture().unbind(); // Textur unbinden
+        planet.getTexture().unbind();
     }
     geometryBuffer.unbind();
 }

@@ -13,11 +13,9 @@ public:
     SolarSystem(const std::filesystem::path& meshPath);
     ~SolarSystem();
 
-    // Kopierkonstruktor und -zuweisung deaktivieren
     SolarSystem(const SolarSystem& other) = delete;
     SolarSystem& operator=(const SolarSystem& other) = delete;
 
-    // Move-Konstruktor und -zuweisung
     SolarSystem(SolarSystem&& other) noexcept;
     SolarSystem& operator=(SolarSystem&& other) noexcept;
 
@@ -32,7 +30,7 @@ private:
     GeometryBuffer geometryBuffer;
     std::vector<float> vertices;
     std::vector<unsigned int> indices;
-    std::vector<Planet> planets; // Liste der Planeten
+    std::vector<Planet> planets;
 };
 
-#endif // SOLAR_SYSTEM_HPP
+#endif

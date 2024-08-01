@@ -52,7 +52,6 @@ int main(int argc, char** argv) {
     std::filesystem::path meshPath = std::filesystem::path(ROOT_DIR) / "res/sphere.obj";
     SolarSystem solarSystem{ meshPath };
 
-    // Textur initialisieren
     std::filesystem::path texturePath = std::filesystem::path(ROOT_DIR) / "res/textures/2k_earth.jpg";
     Texture texture(texturePath);
     texture.setFiltering(GL_LINEAR, GL_LINEAR);
@@ -65,7 +64,6 @@ int main(int argc, char** argv) {
         glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Textur binden
         texture.bind();
         solarSystem.draw();
         texture.unbind();
