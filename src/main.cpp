@@ -78,9 +78,6 @@ int main(int argc, char** argv)
 		glm::vec3(0.0f, 1.0f, 0.0f)  // Up vector
 	);
 
-	// Initialize projection matrix
-	projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
-
 	glfwSetKeyCallback(window, togglePerspectiveProjection);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
 
@@ -88,19 +85,10 @@ int main(int argc, char** argv)
 	while (!glfwWindowShouldClose(window))
 	{
 		if (usePerspectiveProjection) {
-			projection = glm::perspective(
-				glm::radians(45.0f),
-				4.0f / 3.0f,
-				0.1f,
-				100.0f
-			);
+			projection = glm::perspective(glm::radians(45.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
 		}
 		else {
-			projection = glm::ortho(
-				-1.0f, 1.0f,
-				-1.0f, 1.0f,
-				0.1f, 100.0f
-			);
+			projection = glm::ortho(-4.0f, 4.0f, -3.0f, 3.0f, 0.1f, 1000.0f);
 		}
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
