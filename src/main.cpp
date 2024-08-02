@@ -17,6 +17,7 @@
 #include "Shader.hpp"
 #include "GeometryBuffer.hpp"
 #include "SolarSystem.hpp"
+#include "PointLight.hpp"
 #include "Camera.hpp"
 #include "Texture.hpp"
 
@@ -85,7 +86,6 @@ void scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
 	camera.processMouseScroll(yoffset);
 }
 
-
 int main(int argc, char** argv)
 {
 	GLFWwindow* window = initAndCreateWindow();
@@ -114,6 +114,9 @@ int main(int argc, char** argv)
 	float lastFrame = 0.0f;
 	glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
 
+    PointLight pointLight(glm::vec3(0.0f, 0.0f, 0.5f), glm::vec3(0.0f, 0.0f, 0.5f), 0.5, 0.001, 0.00000000003); // Nähere Position
+
+
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = glfwGetTime();
@@ -136,6 +139,8 @@ int main(int argc, char** argv)
 		shader.setUniform("model", glm::mat4(1.0f));
 		shader.setUniform("view", camera.getViewMatrix());
 		shader.setUniform("projection", projection);
+
+		pointLight.configureShader(shader);
 
 		solarSystem.update(0.01f); 
 		texture.bind();
