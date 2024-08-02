@@ -45,8 +45,8 @@ void Camera::processMouseScroll(float yoffset) {
 	zoom += yoffset;
 	if (zoom < 0.0f)
 		zoom = 0.0f;
-	if (zoom > 44.0f)
-		zoom = 44.0f;
+	if (zoom > 43.0f)
+		zoom = 43.0f;
 }
 
 glm::vec3 Camera::getPosition() const {
@@ -54,7 +54,7 @@ glm::vec3 Camera::getPosition() const {
 }
 
 float Camera::getZoom() const {
-    return zoom;
+	return zoom;
 }
 
 void Camera::updateCameraVectors() {
