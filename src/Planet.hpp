@@ -13,11 +13,9 @@ public:
     Planet(const std::string& name, float size, float distanceToSun, float rotationSpeed, float orbitSpeed, const std::filesystem::path& texturePath, GeometryBuffer& sharedBuffer, bool reverseRotation = false);
     ~Planet();
 
-    // Kopierkonstruktor und -zuweisung deaktivieren
     Planet(const Planet& other) = delete;
     Planet& operator=(const Planet& other) = delete;
 
-    // Move-Konstruktor und -zuweisung
     Planet(Planet&& other) noexcept;
     Planet& operator=(Planet&& other) noexcept;
 
@@ -43,7 +41,7 @@ private:
     GeometryBuffer& geometryBuffer;
 
     glm::mat4 modelMatrix;
-    Texture texture; // Textur-Variable
+    Texture texture;
 };
 
-#endif // PLANET_HPP
+#endif

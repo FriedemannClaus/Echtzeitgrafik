@@ -6,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader(const std::filesystem::path& vertexPath, const std::filesystem::path& fragmentPath) {
-    std::string vertexCode = readFile(vertexPath); //Todo: readFile aus funtions.h verwenden
+    std::string vertexCode = readFile(vertexPath);
     std::string fragmentCode = readFile(fragmentPath);
     compileShader(vertexCode.c_str(), fragmentCode.c_str());
 }
@@ -17,14 +17,14 @@ Shader::~Shader() {
 
 Shader::Shader(Shader&& other) noexcept
     : programID(other.programID) {
-    other.programID = 0; // Transfer ownership
+    other.programID = 0;
 }
 
 Shader& Shader::operator=(Shader&& other) noexcept {
     if (this != &other) {
-        glDeleteProgram(programID); // Delete existing program
+        glDeleteProgram(programID);
         programID = other.programID;
-        other.programID = 0; // Transfer ownership
+        other.programID = 0;
     }
     return *this;
 }

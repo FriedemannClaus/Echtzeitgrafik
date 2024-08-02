@@ -2,7 +2,7 @@
 #include <filesystem>
 
 #define GLEW_STATIC
-#include <GL/glew.h> // has to be included first!
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <assimp/Importer.hpp>
 #include <glm/glm.hpp>
@@ -43,7 +43,7 @@ void updateFPS() {
     double currentTime = glfwGetTime();
     frameCount++;
 
-    if (currentTime - lastTime >= 1.0) { // Every second
+    if (currentTime - lastTime >= 1.0) {
         fps = frameCount / static_cast<float>(currentTime - lastTime);
         frameCount = 0;
         lastTime = currentTime;
@@ -114,7 +114,7 @@ int main(int argc, char** argv)
 	float lastFrame = 0.0f;
 	glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
 
-    PointLight pointLight(glm::vec3(0.0f, 0.0f, 0.5f), glm::vec3(0.0f, 0.0f, 0.5f), 0.5, 0.001, 0.00000000003); // Nähere Position
+    PointLight pointLight(glm::vec3(0.0f, 0.0f, 0.5f), glm::vec3(0.0f, 0.0f, 0.5f), 0.5, 0.001, 0.00000000003); // Closer position
 
 
 	while (!glfwWindowShouldClose(window))

@@ -14,7 +14,7 @@
 
 GLFWwindow* initAndCreateWindow(bool debugContext = false)
 {
-	GLFWwindow* window;  // created window
+	GLFWwindow* window;
 
 	if (glfwInit() == 0)
 	{
@@ -28,7 +28,6 @@ GLFWwindow* initAndCreateWindow(bool debugContext = false)
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, debugContext);
 	window = glfwCreateWindow(WIDTH, HEIGHT, "Echtzeitgrafik", nullptr, nullptr);
 
-	// check if window was created successfully
 	if (window == nullptr)
 	{
 		std::cerr << "GLFW failed to create window." << std::endl;
@@ -47,7 +46,6 @@ GLFWwindow* initAndCreateWindow(bool debugContext = false)
 	int flags; glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
 	if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
 	{
-		// initialize debug output 
 		auto debugCallback = [](
 			GLenum source, GLenum type, GLuint id, GLenum severity,
 			GLsizei messageLength, const GLchar* message, const void* userParam)
@@ -66,7 +64,6 @@ GLFWwindow* initAndCreateWindow(bool debugContext = false)
 
 GLint createShaderPipeline(const char* vertexSource, const char* fragmentSource)
 {
-	/* Vertex shader */
 	GLint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexSource, NULL);
 	glCompileShader(vertexShader);
@@ -79,7 +76,6 @@ GLint createShaderPipeline(const char* vertexSource, const char* fragmentSource)
 		printf("Vertex-Shader compilation failed\n%s\n", infoLog);
 	}
 
-	/* Fragment shader */
 	GLint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
 	glCompileShader(fragmentShader);
@@ -90,7 +86,6 @@ GLint createShaderPipeline(const char* vertexSource, const char* fragmentSource)
 		printf("Fragment-Shader compilation failed\n%s\n", infoLog);
 	}
 
-	/* Link shaders */
 	GLint shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);

@@ -15,7 +15,7 @@ public:
     Shader& operator=(const Shader&) = delete;
 
     Shader(Shader&& other) noexcept;
-    Shader& operator=(Shader&& other) noexcept; //Todo: wieso noexcept?
+    Shader& operator=(Shader&& other) noexcept;
 
     void use();
     void setUniform(const std::string& name, int value);

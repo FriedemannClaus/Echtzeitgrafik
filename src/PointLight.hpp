@@ -26,4 +26,4 @@ private:
     float quadratic;
 };
 
-#endif // POINTLIGHT_HPP
+#endif

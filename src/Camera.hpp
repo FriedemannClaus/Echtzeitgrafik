@@ -33,4 +33,4 @@ private:
     float zoom;
 };
 
-#endif // CAMERA_HPP
+#endif

@@ -30,5 +30,5 @@ private:
     size_t indexCount;
 };
 
-#endif // GEOMETRYBUFFER_H
+#endif
 
