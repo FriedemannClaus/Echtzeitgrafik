@@ -5,4 +5,5 @@
 - **S**: Bewegt die Kamera nach hinten
 - **D**: Bewegt die Kamera nach rechts
 - **Leertaste**: Wechseln zwischen perspektivischer und orthogonaler Projektionsmatrix
-- Maus bewegen, um die Kamera ansicht zu ändern
+- Maus bewegen, um die Kameraansicht zu ändern
+- Scrollen im perspektivischen Modus, um zu zoomen
