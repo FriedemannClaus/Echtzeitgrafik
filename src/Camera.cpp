@@ -4,7 +4,7 @@
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
     : position(position), worldUp(up), yaw(yaw), pitch(pitch), front(glm::vec3(0.0f, 0.0f, -1.0f)),
-      movementSpeed(2.5f), mouseSensitivity(0.1f), zoom(45.0f) {
+      movementSpeed(2.5f), mouseSensitivity(0.1f), zoom(0.0f) {
     updateCameraVectors();
 }
 
@@ -42,15 +42,20 @@ void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPi
 }
 
 void Camera::processMouseScroll(float yoffset) {
-    zoom -= yoffset;
-    if (zoom < 1.0f)
-        zoom = 1.0f;
-    if (zoom > 45.0f)
-        zoom = 45.0f;
+    zoom += yoffset;
+    if (zoom < 0.0f)
+        zoom = 0.0f;
+    if (zoom > 44.0f)
+        zoom = 44.0f;
+    updateCameraVectors();
 }
 
 glm::vec3 Camera::getPosition() const {
     return position;
+}
+
+float Camera::getZoom() const {
+    return zoom;
 }
 
 void Camera::updateCameraVectors() {

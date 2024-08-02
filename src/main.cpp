@@ -125,7 +125,7 @@ int main(int argc, char** argv)
 		processInput(window, deltaTime);
 
 		if (usePerspectiveProjection) {
-			projection = glm::perspective(glm::radians(45.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 10000.0f);
+			projection = glm::perspective(glm::radians(45.0f - camera.getZoom()), (float)WIDTH/(float)HEIGHT, 0.1f, 10000.0f);
 		}
 		else {
 			projection = glm::ortho(-4.0f, 4.0f, -3.0f, 3.0f, 0.1f, 10000.0f);
