@@ -46,6 +46,11 @@ Planet& Planet::operator=(Planet&& other) noexcept {
 
 void Planet::draw(Shader& shader) {
 	shader.setUniform("model", modelMatrix);
+	if (name == "Sun") {
+		shader.setUniform("isSun", true);
+	} else {
+		shader.setUniform("isSun", false);
+	}
 	texture.bind();
 	geometryBuffer.bind();
 	glDrawElements(GL_TRIANGLES, geometryBuffer.getIndexCount(), GL_UNSIGNED_INT, 0);

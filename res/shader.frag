@@ -11,6 +11,7 @@ uniform vec3 lightColor;
 uniform float constant;
 uniform float linear;
 uniform float quadratic;
+uniform bool isSun;
 
 uniform sampler2D texture1;
 
@@ -21,21 +22,18 @@ void main()
     vec3 norm = normalize(normal);
     vec3 lightDir = normalize(lightPos - fragPos);
 
-    // Ambient lighting
-    float ambientStr = 0.5;
+    float ambientStr = 0.1;
     vec3 ambient = ambientStr * lightColor;
     
-    // Diffuse lighting
     vec3 diffuse = max(dot(norm, lightDir), 0.0) * lightColor;
 
-    // Specular lighting
     float specularStr = 0.5;
     vec3 viewDir = normalize(viewPos - fragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
     vec3 specular = vec3(0.0); // Initialize specular to zero
 
-    // Only calculate specular if the surface is facing the light
-    if(dot(norm, lightDir) > 0.0) {
+    // Only calculate specular if the surface is facing the light or if it's the sun
+    if((dot(norm, lightDir) > 0.0) || (isSun == true)){
         specular = specularStr * pow(max(dot(viewDir, reflectDir), 0.0), 32) * lightColor;
     }
     
@@ -47,5 +45,5 @@ void main()
     diffuse *= attenuation;
     specular *= attenuation;
     vec3 result = (ambient + diffuse + specular);
-    FragColor = vec4(result, 1.0) * texture(texture1, TexCoord); // * attenuation;
+    FragColor = vec4(result, 1.0) * texture(texture1, TexCoord);
 }
