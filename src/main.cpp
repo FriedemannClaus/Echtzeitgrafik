@@ -35,7 +35,7 @@ glm::mat4 projection;
 void togglePerspectiveProjection(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
 		usePerspectiveProjection = !usePerspectiveProjection;
-		std::cout << (usePerspectiveProjection ? "Wechsel zu Perspektivprojektion" : "Wechsel zu Orthogonaler Projektion") << std::endl;
+		std::cout << (usePerspectiveProjection ? "Using perspective projection" : "Using orthogonal projection") << std::endl;
 	}
 }
 
@@ -74,7 +74,7 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	}
 
 	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos; // Reversed since y-coordinates go from bottom to top
+	float yoffset = lastY - ypos;
 
 	lastX = xpos;
 	lastY = ypos;
@@ -114,7 +114,7 @@ int main(int argc, char** argv)
 	float lastFrame = 0.0f;
 	glPolygonMode(GL_FRONT_AND_BACK, GL_TRIANGLES);
 
-	PointLight pointLight(glm::vec3(0.0f, 0.0f, 0.5f), glm::vec3(0.0f, 0.0f, 0.5f), 0.5, 0.001, 0.00000000003); // Closer position
+	PointLight pointLight(glm::vec3(0.0f, 0.0f, 0.5f), glm::vec3(0.0f, 0.0f, 0.5f), 0.5, 0.001, 0.00000000003);
 
 
 	while (!glfwWindowShouldClose(window))
