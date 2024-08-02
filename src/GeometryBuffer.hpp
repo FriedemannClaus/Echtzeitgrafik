@@ -7,27 +7,27 @@
 
 class GeometryBuffer {
 public:
-    GeometryBuffer();
-    ~GeometryBuffer();
+	GeometryBuffer();
+	~GeometryBuffer();
 
-    GeometryBuffer(const GeometryBuffer& other);
-    GeometryBuffer& operator=(const GeometryBuffer& other);
+	GeometryBuffer(const GeometryBuffer& other);
+	GeometryBuffer& operator=(const GeometryBuffer& other);
 
-    GeometryBuffer(GeometryBuffer&& other) noexcept;
-    GeometryBuffer& operator=(GeometryBuffer&& other) noexcept;
+	GeometryBuffer(GeometryBuffer&& other) noexcept;
+	GeometryBuffer& operator=(GeometryBuffer&& other) noexcept;
 
-    void initialize(const float* vertices, int vertexSize, const unsigned int* indices, int indexSize);
-    void bind() const;
-    void unbind() const;
-    void cleanUp();
-    size_t getIndexCount() const;
+	void initialize(const float* vertices, int vertexSize, const unsigned int* indices, int indexSize);
+	void bind() const;
+	void unbind() const;
+	void cleanUp();
+	size_t getIndexCount() const;
 
 private:
-    GLuint vao;
-    GLuint vbo;
-    GLuint ebo;
-    void copyFrom(const GeometryBuffer& other);
-    size_t indexCount;
+	GLuint vao;
+	GLuint vbo;
+	GLuint ebo;
+	void copyFrom(const GeometryBuffer& other);
+	size_t indexCount;
 };
 
 #endif
