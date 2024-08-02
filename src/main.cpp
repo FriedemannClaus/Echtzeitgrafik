@@ -25,7 +25,7 @@ int frameCount = 0;
 float fps = 0.0f;
 
 static bool usePerspectiveProjection = true;
-Camera camera(glm::vec3(0.0f, 0.0f, 200.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
+Camera camera(glm::vec3(-200.0f, 100.0f, 200.0f), glm::vec3(0.0f, 1.0f, 0.0f), -25.0f, -15.0f);
 float lastX = WIDTH / 2.0f;
 float lastY = HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -125,11 +125,11 @@ int main(int argc, char** argv)
 			projection = glm::perspective(glm::radians(45.0f), (float)WIDTH/(float)HEIGHT, 0.1f, 10000.0f);
 		}
 		else {
-			projection = glm::ortho(-4.0f, 4.0f, -3.0f, 3.0f, 0.1f, 1000.0f);
+			projection = glm::ortho(-4.0f, 4.0f, -3.0f, 3.0f, 0.1f, 10000.0f);
 		}
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(0.0f, 0.1f, 0.2f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 		shader.use();
 
